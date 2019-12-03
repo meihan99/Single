@@ -1,4 +1,6 @@
 package customer;
+
+//运用多态取代与价格相关的条件逻辑
 import java.util.*;
 import movie.*;
 import rental.*;
@@ -25,33 +27,39 @@ public class Customer {
 			double thisAmount = 0;
 			Rental each =(Rental)rentals.nextElement();
 			
-			switch(each.getMovie().getPrinceCode()) {
-			case Movie.REGULAR:
-				thisAmount += 2;
-				if(each.getDaysRented()>2)
-					thisAmount +=(each.getDaysRented()-2) * 1.5;
-				break;
-			case Movie.NEW_RELEASE:
-				thisAmount += each.getDaysRented() * 3;
-				break;
-			case Movie.CHILDRENS:
-				thisAmount += 1.5;
-				if(each.getDaysRented()>3)
-					thisAmount += (each.getDaysRented()-3) * 1.5;
-				break;
-			}
-			
-			frequentRenterPoints ++;
-			if((each.getMovie().getPrinceCode()==Movie.NEW_RELEASE)&&
-					each.getDaysRented()>1)frequentRenterPoints ++;
+			frequentRenterPoints = each.getFrequentRenterPoints();
 			
 			result += "\t" + each.getMovie().getTitle()+ "\t" +
-			String.valueOf(thisAmount) + "\n";
-			totalAmount += thisAmount;
+			String.valueOf(each.getCharge()) + "\n";
+			totalAmount += each.getCharge();
 		}
-		result += "Amount owed is " + String.valueOf(totalAmount)+"\n";
-		result += "You earned " + String.valueOf(frequentRenterPoints)+
+		result += "Amount owed is " + String.valueOf(getTotalCharge())+"\n";
+		result += "You earned " + String.valueOf(getTotalFrequentRenterPoints())+
 				" frequent renter points";
 		return result;
 	}
+	//创建getTotalCharge()
+	private double getTotalCharge() {
+		double result = 0;
+		Enumeration rentals = _rentals.elements();
+		while(rentals.hasMoreElements()) {
+			Rental each = (Rental)rentals.nextElement();
+			result += each.getCharge();
+		}
+		return result;
+	}
+	//创建getTotalFrequentRenterPoints()
+	private int getTotalFrequentRenterPoints() {
+		int result = 0;
+		Enumeration rentals = _rentals.elements();
+		while(rentals.hasMoreElements()) {
+			Rental each = (Rental)rentals.nextElement();
+			result += each.getFrequentRenterPoints();
+		}
+		return result;
+	}
+private double amountFor(Rental aRental) {
+	return  aRental.getCharge();
+	
+}
 }

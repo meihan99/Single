@@ -1,5 +1,4 @@
 package rental;
-
 import movie.*;
 public class Rental {
 	private Movie _movie;
@@ -16,5 +15,13 @@ public class Rental {
 	
 	public Movie getMovie(){
 		return _movie;
+	}
+	//∞·“∆getCharge()µΩMovie
+	public double getCharge() {
+		return _movie.getCharge(_daysRented);
+	}
+	//∞·“∆getFrequentRenterPoints()µΩMovie
+	public int getFrequentRenterPoints() {
+		return _movie.getFrequentRenterPoints(_daysRented);
 	}
 }
